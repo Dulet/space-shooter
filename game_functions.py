@@ -74,7 +74,8 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
     check_bullet_alien_collisions (ai_settings, screen, ship, aliens, bullets)
-    level_end(ai_settings, screen, ship, aliens, bullets)
+    if len(aliens) == 0:
+        level_end(ai_settings, screen, ship, aliens, bullets)
 
 def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
     hit = pygame.sprite.groupcollide(bullets, aliens, True, True)
@@ -86,10 +87,10 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
 
 
 def level_end(ai_settings, screen, ship, aliens, bullets):
-    if len(aliens) == 0:
-        bullets.empty()
-        ai_settings.level += 1
-        create_fleet(ai_settings, screen, ship, aliens)
+    bullets.empty()
+    ai_settings.level += 1
+    create_fleet(ai_settings, screen, ship, aliens)
+    ai_settings.alien_speed += ai_settings.level*2.2 # speed of aliens increasing with each cleared level
 
 
 def update_stars(stars, ai_settings):
@@ -170,13 +171,15 @@ def check_aliens_bottom (ai_settings, stats, screen, ship, aliens, bullets):
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     if stats.ships_left > 0:
         stats.ships_left -= 1
-        ship.center_ship()
         aliens.empty()
         bullets.empty()
         time.sleep(0.5)
     else:
         stats.game_active = False
-        pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(True)
+        stats.ships_left = ai_settings.ship_limit
+        aliens.empty()
+        bullets.empty()
     create_fleet(ai_settings, screen, ship, aliens)
     ship.center_ship()
 
