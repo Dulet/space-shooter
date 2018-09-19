@@ -72,21 +72,24 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets):
+def update_bullets(ai_settings, screen, ship, aliens, bullets, sb, stats):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
-    check_bullet_alien_collisions (ai_settings, screen, ship, aliens, bullets)
+    check_bullet_alien_collisions (ai_settings, screen, ship, aliens, bullets, sb, stats)
     if len(aliens) == 0:
         level_end(ai_settings, screen, ship, aliens, bullets)
 
-def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
+def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets, sb, stats):
     hit = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if hit:
+        stats.score += ai_settings.alien_points
+        sb.prep_score()
     #    aliens.health = aliens.health - 1
         print("hit")
     #if alien.health == 0:
     #   pygame.sprite.groupcollide(bullets, aliens, True, True)
+
 
 
 def level_end(ai_settings, screen, ship, aliens, bullets):
@@ -94,6 +97,7 @@ def level_end(ai_settings, screen, ship, aliens, bullets):
     ai_settings.level += 1
     create_fleet(ai_settings, screen, ship, aliens)
     ai_settings.alien_speed += ai_settings.level*0.4 # speed of aliens increasing with each cleared level
+    ai_settings.alien_points += int(ai_settings.level**2.04)
 
 
 def update_stars(stars, ai_settings):
