@@ -19,6 +19,8 @@ class Background(pygame.sprite.Sprite):
 
 def run_game():
     # create a screen and launch the game
+    pygame.mixer.pre_init(44100, -16, 16, 2048)
+    pygame.mixer.init()
     pygame.init()
     ai_settings = Settings()
     screen = pygame.display.set_mode(
@@ -51,9 +53,8 @@ def run_game():
             gf.update_stars(stars, ai_settings)
             bullets.update()
             stars.update()
-            ship.update()
+            ship.update(bullets, ai_settings, screen, ship)
             screen.fill(ai_settings.bg_color)
             # screen.blit(BackGround.image, BackGround.rect)
             clock.tick_busy_loop(fps)
-
 run_game()

@@ -5,7 +5,6 @@ import time
 from bullet import Bullet
 from alien import Alien
 from star import Star
-
 def check_events(ai_settings, screen, stats, play_button, ship, bullets):
     """responds to specific keypresses and mouse events"""
     for event in pygame.event.get():
@@ -15,7 +14,7 @@ def check_events(ai_settings, screen, stats, play_button, ship, bullets):
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:
-            check_keyup_events(event, ship)
+            check_keyup_events(event, ai_settings, ship, screen, bullets)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_play_button(stats, play_button, mouse_x, mouse_y)
@@ -36,10 +35,11 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_DOWN:
         ship.moving_down = True
     elif event.key == pygame.K_a:
-        fire_bullet(ai_settings, screen, ship, bullets)
+        ship.fire = True
+        # fire_bullet(ai_settings, screen, ship, bullets)
 
 
-def check_keyup_events(event, ship):
+def check_keyup_events(event, ai_settings, ship, screen, bullets):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = False
     elif event.key == pygame.K_LEFT:
@@ -48,6 +48,8 @@ def check_keyup_events(event, ship):
         ship.moving_up = False
     elif event.key == pygame.K_DOWN:
         ship.moving_down = False
+    elif event.key == pygame.K_a:
+        ship.fire = False
 
 def update_screen(ai_settings, screen, stats, sb, stars, ship, aliens, bullets, play_button):
     """update images on screen and flip on the new screen"""
