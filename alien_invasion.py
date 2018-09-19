@@ -36,8 +36,9 @@ def run_game():
     BackGround = Background('images/background.png', [0,0])
 
     # create a fleet
-    gf.create_fleet(ai_settings, screen, ship, aliens)
-    gf.create_stars(ai_settings, screen, stars)
+    if stats.game_active:
+        gf.create_fleet(ai_settings, screen, ship, aliens)
+        gf.create_stars(ai_settings, screen, stars)
 
     # main game loop
     while True:
@@ -54,6 +55,5 @@ def run_game():
             screen.fill(ai_settings.bg_color)
             # screen.blit(BackGround.image, BackGround.rect)
             clock.tick_busy_loop(fps)
-            print(int(clock.get_fps()))
 
 run_game()

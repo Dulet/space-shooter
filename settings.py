@@ -20,7 +20,7 @@ class Settings():
         self.bullet_width = 1
         self.bullet_height = 3
         self.bullet_color = 10, 210, 92
-        self.bullets_allowed = 10
+        self.bullets_allowed = 2
 
         # stars settings
         self.max_stars_speed = 10

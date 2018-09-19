@@ -15,7 +15,7 @@ class Star(Sprite):
 
         self.rect.x = random.randint(0, ai_settings.screen_width)
         self.rect.y = random.randint(-4 * ai_settings.screen_height,
-                                     ai_settings.screen_height)
+                                     -1 * ai_settings.screen_height)
 
         self.speed_factor = ai_settings.bullet_speed_factor
         self.stars_speed = ai_settings.max_stars_speed

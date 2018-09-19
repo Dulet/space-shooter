@@ -74,22 +74,23 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
     check_bullet_alien_collisions (ai_settings, screen, ship, aliens, bullets)
-    level_end(ai_settings, screen, ship, aliens, bullets)
+    if len(aliens) == 0:
+        level_end(ai_settings, screen, ship, aliens, bullets)
 
 def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
-    hit = pygame.sprite.groupcollide(bullets, aliens, True, False)
+    hit = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if hit:
-        aliens.health = aliens.health - 1
-        print(aliens.health)
-    if alien.health == 0:
-        pygame.sprite.groupcollide(bullets, aliens, True, True)
+    #    aliens.health = aliens.health - 1
+        print("hit")
+    #if alien.health == 0:
+    #   pygame.sprite.groupcollide(bullets, aliens, True, True)
 
 
 def level_end(ai_settings, screen, ship, aliens, bullets):
-    if len(aliens) == 0:
-        bullets.empty()
-        ai_settings.level += 1
-        create_fleet(ai_settings, screen, ship, aliens)
+    bullets.empty()
+    ai_settings.level += 1
+    create_fleet(ai_settings, screen, ship, aliens)
+    ai_settings.alien_speed += ai_settings.level*0.4 # speed of aliens increasing with each cleared level
 
 
 def update_stars(stars, ai_settings):
@@ -109,21 +110,21 @@ def create_stars(ai_settings, screen, stars):
 def get_number_aliens_x (ai_settings, alien_width):
     """determine the number of aliens that fit the row"""
     available_space_x = ai_settings.screen_width - 4 * alien_width
-    number_aliens_x = int(available_space_x / (8 * alien_width))  # how many aliens in one row
+    number_aliens_x = int(available_space_x / (3 * alien_width)) # amount of aliens in a single row (less = more)
     return number_aliens_x
 
 def get_number_rows(ai_settings, ship_height, alien_height):
-    available_space_y = (ai_settings.screen_height - (4 * alien_height) - ship_height)
-    number_rows = int(available_space_y / (4 * alien_height))  # how many rows of aliens
+    available_space_y = (ai_settings.screen_height - (2 * alien_height) - ship_height)
+    number_rows = int(available_space_y / (6 * alien_height))  # how many rows of aliens (less = more)
     return number_rows
 
 def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     alien = Alien(ai_settings, screen)
     """create an alien"""
     alien_width = alien.rect.width
-    alien.x = alien_width + 4 * alien_width * alien_number  # how spread the aliens are
+    alien.x = alien_width + 2 * alien_width * alien_number  # how spread the aliens are in WIDTH
     alien.rect.x = alien.x
-    alien.rect.y = alien.rect.height + 5 * alien.rect.height * row_number
+    alien.rect.y = alien.rect.height + 3 * alien.rect.height * row_number # how spread they are in HEIGHT
     aliens.add(alien)
 
 def create_fleet(ai_settings, screen, ship, aliens):
@@ -170,13 +171,15 @@ def check_aliens_bottom (ai_settings, stats, screen, ship, aliens, bullets):
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     if stats.ships_left > 0:
         stats.ships_left -= 1
-        ship.center_ship()
         aliens.empty()
         bullets.empty()
         time.sleep(0.5)
     else:
         stats.game_active = False
-        pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(True)
+        stats.ships_left = ai_settings.ship_limit
+        aliens.empty()
+        bullets.empty()
     create_fleet(ai_settings, screen, ship, aliens)
     ship.center_ship()
 
