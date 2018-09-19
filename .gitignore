@@ -206,3 +206,9 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/python,pycharm
+
+# Start of Melol
+
+.vscode
+
+# End of MELOL
