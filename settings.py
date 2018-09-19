@@ -16,11 +16,13 @@ class Settings():
         self.bg_color = (0, 0, 15)
 
         # bullet settings
-        self.bullet_speed_factor = 20
+        self.bullet_speed_factor = 7
         self.bullet_width = 1
         self.bullet_height = 3
         self.bullet_color = 10, 210, 92
-        self.bullets_allowed = 2
+        self.bullets_allowed = 10
+        self.fire_cooldown = 0
+        self.shoot_cooldown = 6
 
         # stars settings
         self.max_stars_speed = 10

@@ -1,6 +1,6 @@
 import pygame
-# from bullet import Bullet used when you want to autofire
-# import time autofire
+from bullet import Bullet  #used when you want to autofire
+import time #autofire
 
 class Ship:
 
@@ -27,9 +27,9 @@ class Ship:
         self.moving_left = False
         self.moving_up = False
         self.moving_down = False
-        # self.fire = False autofire
+        self.fire = False # autofire
 
-    def update(self):
+    def update(self, bullets, ai_settings, screen, ship):
         """update the ship movement depending on keypress"""
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.center += self.ai_settings.ship_speed_factor
@@ -39,13 +39,20 @@ class Ship:
             self.rect.centery -= self.ai_settings.ship_speed_factor
         if self.moving_down and self.screen_rect.bottom > self.rect.bottom:
             self.rect.centery += self.ai_settings.ship_speed_factor + 0.5
-        # autofire
-        # if self.fire and len(bullets) < ai_settings.bullets_allowed:
-        #    new_bullet = Bullet(ai_settings, screen, ship)
-        #    bullets.add(new_bullet)
+        #autofire
+        aaa = pygame.mixer.Sound('sounds/lazer.wav')
+        if self.fire and len(bullets) < ai_settings.bullets_allowed:
+            if ai_settings.fire_cooldown == ai_settings.shoot_cooldown:
+                ai_settings.fire_cooldown = 0
+                new_bullet = Bullet(ai_settings, screen, ship)
+                bullets.add(new_bullet)
+                aaa.play()
+            else:
+                ai_settings.fire_cooldown = ai_settings.fire_cooldown + 1
+
 
         self.rect.centerx = self.center
-        pygame.mixer.music.load('sounds/lazer.wav')
+
     def center_ship(self):
         self.center = self.screen_rect.centerx
         self.rect.bottom = self.screen_rect.bottom
