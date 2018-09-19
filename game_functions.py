@@ -90,7 +90,7 @@ def level_end(ai_settings, screen, ship, aliens, bullets):
     bullets.empty()
     ai_settings.level += 1
     create_fleet(ai_settings, screen, ship, aliens)
-    ai_settings.alien_speed += ai_settings.level*2.2 # speed of aliens increasing with each cleared level
+    ai_settings.alien_speed += ai_settings.level*0.4 # speed of aliens increasing with each cleared level
 
 
 def update_stars(stars, ai_settings):
